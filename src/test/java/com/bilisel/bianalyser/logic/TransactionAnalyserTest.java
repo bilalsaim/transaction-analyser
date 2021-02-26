@@ -2,7 +2,7 @@ package com.bilisel.bianalyser.logic;
 
 import com.bilisel.bianalyser.model.AnalysisResult;
 import com.bilisel.bianalyser.model.Transaction;
-import com.bilisel.bianalyser.model.TransactionBuilder;
+import com.bilisel.bianalyser.util.TransactionBuilder;
 import com.bilisel.bianalyser.util.DateHelper;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static com.bilisel.bianalyser.model.TransactionType.PAYMENT;
 import static com.bilisel.bianalyser.model.TransactionType.REVERSAL;
+import static com.bilisel.bianalyser.util.TestHelper.createDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionAnalyserTest {
@@ -27,17 +28,17 @@ public class TransactionAnalyserTest {
         Date possibleMaxToDate = new Date(Long.MAX_VALUE);
 
         Transaction t0 = TransactionBuilder.builder()
-                .withAmount(10.0)
+                .withAmount(10.00)
                 .withMerchant(merchant)
                 .withType(PAYMENT)
                 .build();
         Transaction t1 = TransactionBuilder.builder()
-                .withAmount(5.0)
+                .withAmount(5.00)
                 .withMerchant("Eda")
                 .withType(PAYMENT)
                 .build();
         Transaction t2 = TransactionBuilder.builder()
-                .withAmount(15.0)
+                .withAmount(15.00)
                 .withMerchant(merchant)
                 .withType(PAYMENT)
                 .build();
@@ -53,7 +54,7 @@ public class TransactionAnalyserTest {
 
         // then
         assertEquals(2, result.getNumberOfTransaction());
-        assertEquals(25.0, result.getAverageTransactionValue());
+        assertEquals(createDecimal(12.50), result.getAverageTransactionValue());
     }
 
     @Test
@@ -93,7 +94,7 @@ public class TransactionAnalyserTest {
 
         // then
         assertEquals(2, result.getNumberOfTransaction());
-        assertEquals(15.0, result.getAverageTransactionValue());
+        assertEquals(createDecimal(7.50), result.getAverageTransactionValue());
     }
 
     @Test
@@ -135,7 +136,7 @@ public class TransactionAnalyserTest {
 
         // then
         assertEquals(2, result.getNumberOfTransaction());
-        assertEquals(40.0, result.getAverageTransactionValue());
+        assertEquals(createDecimal(20.0), result.getAverageTransactionValue());
     }
 
     @Test
@@ -198,6 +199,6 @@ public class TransactionAnalyserTest {
 
         // then
         assertEquals(2, result.getNumberOfTransaction());
-        assertEquals(90.0, result.getAverageTransactionValue());
+        assertEquals(createDecimal(45.0), result.getAverageTransactionValue());
     }
 }

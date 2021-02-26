@@ -1,16 +1,20 @@
-package com.bilisel.bianalyser.model;
+package com.bilisel.bianalyser.util;
 
-import com.bilisel.bianalyser.util.DateHelper;
+import com.bilisel.bianalyser.model.Transaction;
+import com.bilisel.bianalyser.model.TransactionType;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
+
+import static com.bilisel.bianalyser.util.TestHelper.createDecimal;
 
 public class TransactionBuilder {
 
     private String id = "RandomId";
     private String merchant = "Random";
     private Date date = new Date();
-    private double amount = 0.0;
+    private BigDecimal amount = BigDecimal.ZERO;
     private TransactionType type = TransactionType.PAYMENT;
 
     private TransactionBuilder() {
@@ -36,7 +40,7 @@ public class TransactionBuilder {
     }
 
     public TransactionBuilder withAmount(double amount) {
-        this.amount = amount;
+        this.amount = createDecimal(amount);
         return this;
     }
 

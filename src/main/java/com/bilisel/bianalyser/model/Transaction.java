@@ -3,6 +3,7 @@ package com.bilisel.bianalyser.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -12,12 +13,12 @@ public class Transaction {
 
     private final String ID;
     private final Date date;
-    private final double amount;
+    private final BigDecimal amount;
     private final String merchant;
     private final TransactionType transactionType;
     private final Set<Transaction> reversalTransactions;
 
-    public Transaction(String ID, Date date, Double amount, String merchant, TransactionType transactionType) {
+    public Transaction(String ID, Date date, BigDecimal amount, String merchant, TransactionType transactionType) {
         this.ID = ID;
         this.date = date;
         this.amount = amount;
@@ -34,7 +35,7 @@ public class Transaction {
         return new Date(date.getTime());
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

@@ -1,10 +1,12 @@
 package com.bilisel.bianalyser.model;
 
+import java.math.BigDecimal;
+
 public class AnalysisResult {
     private int numberOfTransaction;
-    private double averageTransactionValue;
+    private BigDecimal averageTransactionValue;
 
-    public AnalysisResult(int numberOfTransaction, double averageTransactionValue) {
+    public AnalysisResult(int numberOfTransaction, BigDecimal averageTransactionValue) {
         this.numberOfTransaction = numberOfTransaction;
         this.averageTransactionValue = averageTransactionValue;
     }
@@ -13,7 +15,7 @@ public class AnalysisResult {
         return numberOfTransaction;
     }
 
-    public double getAverageTransactionValue() {
+    public BigDecimal getAverageTransactionValue() {
         return averageTransactionValue;
     }
 }

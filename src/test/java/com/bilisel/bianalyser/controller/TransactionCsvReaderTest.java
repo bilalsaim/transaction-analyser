@@ -1,7 +1,7 @@
 package com.bilisel.bianalyser.controller;
 
 import com.bilisel.bianalyser.model.Transaction;
-import com.bilisel.bianalyser.model.TransactionBuilder;
+import com.bilisel.bianalyser.util.TransactionBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

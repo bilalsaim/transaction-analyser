@@ -3,16 +3,16 @@ package com.bilisel.bianalyser.controller;
 import com.bilisel.bianalyser.model.Transaction;
 import com.bilisel.bianalyser.model.TransactionType;
 import com.bilisel.bianalyser.util.DateHelper;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
+import com.univocity.parsers.common.routine.InputDimension;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
+import com.univocity.parsers.csv.CsvRoutines;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class TransactionCsvReader implements TransactionFileReader {
@@ -26,37 +26,39 @@ public class TransactionCsvReader implements TransactionFileReader {
 
         File file = new File(fileLocation);
 
-        Map<String, Transaction> modelMap = new HashMap();
+        int mapCapacity = calculateMapCapacity(file);
+        Map<String, Transaction> modelMap = new HashMap(mapCapacity);
 
-        final CSVFormat format = CSVFormat.DEFAULT
-                .withIgnoreEmptyLines(true)
-                .withHeader()
-                .withIgnoreSurroundingSpaces(true)
-                .withDelimiter(',');
+        CsvParserSettings settings = new CsvParserSettings();
+        settings.setIgnoreLeadingWhitespaces(true);
+        settings.setHeaderExtractionEnabled(true);
 
-        CSVParser parser = CSVParser.parse(file, Charset.forName("UTF-8"), format);
-        Iterator<CSVRecord> iterator = parser.iterator();
+        CsvParser parser = new CsvParser(settings);
+        String[] row;
+        parser.beginParsing(file);
 
-        while (iterator.hasNext()) {
-            CSVRecord csv = iterator.next();
-
-            csv.get("Date");
+        while ((row = parser.parseNext()) != null) {
             Transaction model = new Transaction(
-                    csv.get("ID"),
-                    DateHelper.parseDate(csv.get("Date")),
-                    Double.valueOf(csv.get("Amount")),
-                    csv.get("Merchant"),
-                    TransactionType.valueOf(csv.get("Type"))
+                    row[0],
+                    DateHelper.parseDate(row[1]),
+                    new BigDecimal(row[2]),
+                    row[3],
+                    TransactionType.valueOf(row[4])
             );
 
-            if (!csv.get("Related Transaction").isEmpty()) {
-                modelMap.get(csv.get("Related Transaction")).addReversalTransaction(model);
+            if (row[5] != null && !row[5].isEmpty()) {
+                modelMap.get(row[5]).addReversalTransaction(model);
             }
 
             modelMap.put(model.getID(), model);
         }
 
         return modelMap;
+    }
+
+    private int calculateMapCapacity(File file) {
+        InputDimension inputDimension = new CsvRoutines().getInputDimension(file);
+        return (int) ((inputDimension.rowCount()) / 0.75 + 1);
     }
 
     public static TransactionCsvReader getInstance() {
