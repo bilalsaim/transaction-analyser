@@ -6,14 +6,6 @@ The goal of the system is to display statistical information about processed fin
      
 ![Build Status](https://github.com/bilalsaim/hoolah-transaction-analyser/workflows/Java%20CI%20with%20Maven/badge.svg)
 
-# Notes
-
-* Application excludes transactions which have REVERSAL type of transaction. But there was no specific information to exclude REVERSAL type of transactions from analysis.
-Application doesn't exclude them. But If they need to be excluded as well, commented line TransactionAnalyser:40 can be uncommented. Otherwise the line can be deleted. 
-
-```sh
-    //.filter(x -> !x.getType().equals(REVERSAL))
-```
 
 ## Usage
 
